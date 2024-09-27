@@ -9,6 +9,7 @@ import {
   Chains,
   CrossChainExtraDataEncoder,
   DepositReceipt,
+  DepositState,
   L1BitcoinDepositor,
   L2Chain,
 } from "../contracts"
@@ -18,7 +19,10 @@ import { Hex } from "../utils"
 
 // TODO: Uncomment once BaseL1BitcoinDepositor is available on Ethereum mainnet.
 // import MainnetBaseL1BitcoinDepositorDeployment from "./artifacts/mainnet/BaseL1BitcoinDepositor.json"
+import MainnetArbitrumL1BitcoinDepositorDeployment from "./artifacts/mainnet/ArbitrumOneL1BitcoinDepositor.json"
+
 import SepoliaBaseL1BitcoinDepositorDeployment from "./artifacts/sepolia/BaseL1BitcoinDepositor.json"
+import SepoliaArbitrumL1BitcoinDepositorDeployment from "./artifacts/sepolia/ArbitrumL1BitcoinDepositor.json"
 
 const artifactLoader = {
   getMainnet: (l2ChainName: L2Chain) => {
@@ -26,6 +30,10 @@ const artifactLoader = {
       // TODO: Uncomment once BaseL1BitcoinDepositor is available on Ethereum mainnet.
       // case "Base":
       //   return MainnetBaseL1BitcoinDepositorDeployment
+
+      case "Arbitrum":
+        return MainnetArbitrumL1BitcoinDepositorDeployment
+
       default:
         throw new Error("Unsupported L2 chain")
     }
@@ -35,6 +43,8 @@ const artifactLoader = {
     switch (l2ChainName) {
       case "Base":
         return SepoliaBaseL1BitcoinDepositorDeployment
+      case "Arbitrum":
+        return SepoliaArbitrumL1BitcoinDepositorDeployment
       default:
         throw new Error("Unsupported L2 chain")
     }
@@ -73,6 +83,14 @@ export class EthereumL1BitcoinDepositor
     super(config, deployment)
 
     this.#extraDataEncoder = new EthereumCrossChainExtraDataEncoder()
+  }
+
+  // eslint-disable-next-line valid-jsdoc
+  /**
+   * @see {L1BitcoinDepositor#getDepositState}
+   */
+  getDepositState(depositId: string): Promise<DepositState> {
+    return this._instance.deposits(depositId)
   }
 
   // eslint-disable-next-line valid-jsdoc

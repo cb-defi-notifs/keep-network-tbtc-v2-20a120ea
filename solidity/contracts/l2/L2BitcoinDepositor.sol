@@ -13,7 +13,7 @@
 //               ▐████▌    ▐████▌
 //               ▐████▌    ▐████▌
 
-pragma solidity ^0.8.17;
+pragma solidity 0.8.17;
 
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
@@ -68,6 +68,15 @@ contract L2BitcoinDepositor is IWormholeReceiver, OwnableUpgradeable {
         uint16 _l1ChainId
     ) external initializer {
         __Ownable_init();
+
+        require(
+            _wormholeRelayer != address(0),
+            "WormholeRelayer address cannot be zero"
+        );
+        require(
+            _l2WormholeGateway != address(0),
+            "L2WormholeGateway address cannot be zero"
+        );
 
         wormholeRelayer = IWormholeRelayer(_wormholeRelayer);
         l2WormholeGateway = IL2WormholeGateway(_l2WormholeGateway);

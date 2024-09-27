@@ -35,6 +35,7 @@ for reference.
 - [extraDataEncoder](EthereumL1BitcoinDepositor.md#extradataencoder)
 - [getAddress](EthereumL1BitcoinDepositor.md#getaddress)
 - [getChainIdentifier](EthereumL1BitcoinDepositor.md#getchainidentifier)
+- [getDepositState](EthereumL1BitcoinDepositor.md#getdepositstate)
 - [getEvents](EthereumL1BitcoinDepositor.md#getevents)
 - [initializeDeposit](EthereumL1BitcoinDepositor.md#initializedeposit)
 
@@ -50,7 +51,7 @@ for reference.
 | :------ | :------ |
 | `config` | [`EthereumContractConfig`](../interfaces/EthereumContractConfig.md) |
 | `chainId` | [`Ethereum`](../enums/Chains.Ethereum.md) |
-| `l2ChainName` | ``"Base"`` |
+| `l2ChainName` | [`L2Chain`](../README.md#l2chain) |
 
 #### Returns
 
@@ -62,7 +63,7 @@ EthersContractHandle\&lt;L1BitcoinDepositorTypechain\&gt;.constructor
 
 #### Defined in
 
-[src/lib/ethereum/l1-bitcoin-depositor.ts:55](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/l1-bitcoin-depositor.ts#L55)
+[lib/ethereum/l1-bitcoin-depositor.ts:65](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/l1-bitcoin-depositor.ts#L65)
 
 ## Properties
 
@@ -72,7 +73,7 @@ EthersContractHandle\&lt;L1BitcoinDepositorTypechain\&gt;.constructor
 
 #### Defined in
 
-[src/lib/ethereum/l1-bitcoin-depositor.ts:53](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/l1-bitcoin-depositor.ts#L53)
+[lib/ethereum/l1-bitcoin-depositor.ts:63](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/l1-bitcoin-depositor.ts#L63)
 
 ___
 
@@ -90,7 +91,7 @@ EthersContractHandle.\_deployedAtBlockNumber
 
 #### Defined in
 
-[src/lib/ethereum/adapter.ts:80](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/adapter.ts#L80)
+[lib/ethereum/adapter.ts:80](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/adapter.ts#L80)
 
 ___
 
@@ -106,7 +107,7 @@ EthersContractHandle.\_instance
 
 #### Defined in
 
-[src/lib/ethereum/adapter.ts:74](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/adapter.ts#L74)
+[lib/ethereum/adapter.ts:74](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/adapter.ts#L74)
 
 ___
 
@@ -122,7 +123,7 @@ EthersContractHandle.\_totalRetryAttempts
 
 #### Defined in
 
-[src/lib/ethereum/adapter.ts:84](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/adapter.ts#L84)
+[lib/ethereum/adapter.ts:84](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/adapter.ts#L84)
 
 ## Methods
 
@@ -142,7 +143,7 @@ EthersContractHandle.\_totalRetryAttempts
 
 #### Defined in
 
-[src/lib/ethereum/l1-bitcoin-depositor.ts:90](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/l1-bitcoin-depositor.ts#L90)
+[lib/ethereum/l1-bitcoin-depositor.ts:108](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/l1-bitcoin-depositor.ts#L108)
 
 ___
 
@@ -164,7 +165,7 @@ EthersContractHandle.getAddress
 
 #### Defined in
 
-[src/lib/ethereum/adapter.ts:112](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/adapter.ts#L112)
+[lib/ethereum/adapter.ts:112](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/adapter.ts#L112)
 
 ___
 
@@ -184,7 +185,33 @@ ___
 
 #### Defined in
 
-[src/lib/ethereum/l1-bitcoin-depositor.ts:82](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/l1-bitcoin-depositor.ts#L82)
+[lib/ethereum/l1-bitcoin-depositor.ts:100](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/l1-bitcoin-depositor.ts#L100)
+
+___
+
+### getDepositState
+
+▸ **getDepositState**(`depositId`): `Promise`\<[`DepositState`](../enums/DepositState.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `depositId` | `string` |
+
+#### Returns
+
+`Promise`\<[`DepositState`](../enums/DepositState.md)\>
+
+**`See`**
+
+#### Implementation of
+
+[L1BitcoinDepositor](../interfaces/L1BitcoinDepositor.md).[getDepositState](../interfaces/L1BitcoinDepositor.md#getdepositstate)
+
+#### Defined in
+
+[lib/ethereum/l1-bitcoin-depositor.ts:92](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/l1-bitcoin-depositor.ts#L92)
 
 ___
 
@@ -218,7 +245,7 @@ EthersContractHandle.getEvents
 
 #### Defined in
 
-[src/lib/ethereum/adapter.ts:127](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/adapter.ts#L127)
+[lib/ethereum/adapter.ts:127](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/adapter.ts#L127)
 
 ___
 
@@ -247,4 +274,4 @@ ___
 
 #### Defined in
 
-[src/lib/ethereum/l1-bitcoin-depositor.ts:98](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/l1-bitcoin-depositor.ts#L98)
+[lib/ethereum/l1-bitcoin-depositor.ts:116](https://github.com/keep-network/tbtc-v2/blob/main/typescript/src/lib/ethereum/l1-bitcoin-depositor.ts#L116)

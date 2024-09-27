@@ -19,6 +19,7 @@ import {
 } from "../lib/ethereum"
 import { ElectrumClient } from "../lib/electrum"
 import { loadBaseCrossChainContracts } from "../lib/base"
+import { loadArbitrumCrossChainContracts } from "../lib/arbitrum"
 
 /**
  * Entrypoint component of the tBTC v2 SDK.
@@ -79,15 +80,20 @@ export class TBTC {
    * The initialized instance uses default Electrum servers to interact
    * with Bitcoin mainnet
    * @param signer Ethereum signer.
+   * @param crossChainSupport Whether to enable cross-chain support. False by default.
    * @returns Initialized tBTC v2 SDK entrypoint.
    * @throws Throws an error if the signer's Ethereum network is other than
    *         Ethereum mainnet.
    */
-  static async initializeMainnet(signer: EthereumSigner): Promise<TBTC> {
+  static async initializeMainnet(
+    signer: EthereumSigner,
+    crossChainSupport: boolean = false
+  ): Promise<TBTC> {
     return TBTC.initializeEthereum(
       signer,
       Chains.Ethereum.Mainnet,
-      BitcoinNetwork.Mainnet
+      BitcoinNetwork.Mainnet,
+      crossChainSupport
     )
   }
 
@@ -96,15 +102,20 @@ export class TBTC {
    * The initialized instance uses default Electrum servers to interact
    * with Bitcoin testnet
    * @param signer Ethereum signer.
+   * @param crossChainSupport Whether to enable cross-chain support. False by default.
    * @returns Initialized tBTC v2 SDK entrypoint.
    * @throws Throws an error if the signer's Ethereum network is other than
    *         Ethereum mainnet.
    */
-  static async initializeSepolia(signer: EthereumSigner): Promise<TBTC> {
+  static async initializeSepolia(
+    signer: EthereumSigner,
+    crossChainSupport: boolean = false
+  ): Promise<TBTC> {
     return TBTC.initializeEthereum(
       signer,
       Chains.Ethereum.Sepolia,
-      BitcoinNetwork.Testnet
+      BitcoinNetwork.Testnet,
+      crossChainSupport
     )
   }
 
@@ -115,6 +126,7 @@ export class TBTC {
    * @param signer Ethereum signer.
    * @param ethereumChainId Ethereum chain ID.
    * @param bitcoinNetwork Bitcoin network.
+   * @param crossChainSupport Whether to enable cross-chain support. False by default.
    * @returns Initialized tBTC v2 SDK entrypoint.
    * @throws Throws an error if the underlying signer's Ethereum network is
    *         other than the given Ethereum network.
@@ -122,17 +134,23 @@ export class TBTC {
   private static async initializeEthereum(
     signer: EthereumSigner,
     ethereumChainId: Chains.Ethereum,
-    bitcoinNetwork: BitcoinNetwork
+    bitcoinNetwork: BitcoinNetwork,
+    crossChainSupport = false
   ): Promise<TBTC> {
     const signerAddress = await ethereumAddressFromSigner(signer)
     const tbtcContracts = await loadEthereumCoreContracts(
       signer,
       ethereumChainId
     )
-    const crossChainContractsLoader = await ethereumCrossChainContractsLoader(
-      signer,
-      ethereumChainId
-    )
+
+    let crossChainContractsLoader: CrossChainContractsLoader | undefined =
+      undefined
+    if (crossChainSupport) {
+      crossChainContractsLoader = await ethereumCrossChainContractsLoader(
+        signer,
+        ethereumChainId
+      )
+    }
 
     const bitcoinClient = ElectrumClient.fromDefaultConfig(bitcoinNetwork)
 
@@ -170,6 +188,12 @@ export class TBTC {
   /**
    * Initializes cross-chain contracts for the given L2 chain, using the
    * given signer. Updates the signer on subsequent calls.
+   *
+   * @experimental THIS IS EXPERIMENTAL CODE THAT CAN BE CHANGED OR REMOVED
+   *               IN FUTURE RELEASES. IT SHOULD BE USED ONLY FOR INTERNAL
+   *               PURPOSES AND EXTERNAL APPLICATIONS SHOULD NOT DEPEND ON IT.
+   *               CROSS-CHAIN SUPPORT IS NOT FULLY OPERATIONAL YET.
+   *
    * @param l2ChainName Name of the L2 chain for which to initialize
    *                    cross-chain contracts.
    * @param l2Signer Signer to use with the L2 chain contracts.
@@ -212,6 +236,16 @@ export class TBTC {
           baseChainId
         )
         break
+      case "Arbitrum":
+        const arbitrumChainId = chainMapping.arbitrum
+        if (!arbitrumChainId) {
+          throw new Error("Arbitrum chain ID not available in chain mapping")
+        }
+        l2CrossChainContracts = await loadArbitrumCrossChainContracts(
+          l2Signer,
+          arbitrumChainId
+        )
+        break
       default:
         throw new Error("Unsupported L2 chain")
     }
@@ -226,6 +260,12 @@ export class TBTC {
    * Gets cross-chain contracts for the given supported L2 chain.
    * The given L2 chain contracts must be first initialized using the
    * `initializeCrossChain` method.
+   *
+   * @experimental THIS IS EXPERIMENTAL CODE THAT CAN BE CHANGED OR REMOVED
+   *               IN FUTURE RELEASES. IT SHOULD BE USED ONLY FOR INTERNAL
+   *               PURPOSES AND EXTERNAL APPLICATIONS SHOULD NOT DEPEND ON IT.
+   *               CROSS-CHAIN SUPPORT IS NOT FULLY OPERATIONAL YET.
+   *
    * @param l2ChainName Name of the L2 chain for which to get cross-chain contracts.
    * @returns Cross-chain contracts for the given L2 chain or
    *          undefined if not initialized.
